@@ -43,8 +43,8 @@ type config struct {
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use: "dTail",
-	Long: `dTail 是一个类似于 tail -f 的工具，专为文件夹设计。它可以持续监控文件夹内的最新文件，并将新写入的内容输出到终端。
+	Use: "dtail",
+	Long: `dtail 是一个类似于 tail -f 的工具，专为文件夹设计。它可以持续监控文件夹内的最新文件，并将新写入的内容输出到终端。
 特别适用于按小时等更细粒度切割生成新文件的日志系统。
 更多信息：https://github.com/bynow2code/dtail`,
 }
@@ -57,7 +57,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dTail.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dtail.yaml)")
 	rootCmd.PersistentFlags().BoolVarP(&appConfig.force, "force", "f", false, "强制操作")
 }
 
@@ -71,7 +71,7 @@ func initConfig() {
 
 		viper.AddConfigPath(home)
 		viper.SetConfigType("yaml")
-		viper.SetConfigName(".dTail")
+		viper.SetConfigName(".dtail")
 	}
 
 	// If a config file is found, read it in.
