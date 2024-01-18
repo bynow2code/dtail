@@ -44,7 +44,7 @@ var aliasCmd = &cobra.Command{
 		}
 
 		appConfig.DirectoryAliasMap[dirAlias] = &aliasConfig{Path: dirPath}
-		viper.Set("directory-aliasConfig", appConfig.DirectoryAliasMap)
+		viper.Set("directory-alias-map", appConfig.DirectoryAliasMap)
 
 		err := viper.WriteConfig()
 		cobra.CheckErr(err)

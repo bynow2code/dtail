@@ -38,7 +38,7 @@ type aliasConfig struct {
 
 type config struct {
 	force             bool
-	DirectoryAliasMap map[string]*aliasConfig `mapstructure:"directory-alias"`
+	DirectoryAliasMap map[string]*aliasConfig `mapstructure:"directory-alias-map"`
 }
 
 // rootCmd represents the base command when called without any subcommands
