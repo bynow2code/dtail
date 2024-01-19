@@ -39,7 +39,15 @@ archives:
 
 release:
   name_template: "v{{ .Version }}"
-  target_commitish: "{{ .Commit }}"
+#  target_commitish: "{{ .Commit }}"
+  header: |
+    ## Some title ({{ .Date }})
+
+    Welcome to this new release!
+  footer: |
+    ## Thanks
+    
+    Those were the changes on {{ .Tag }}!
 
 changelog:
   sort: asc
