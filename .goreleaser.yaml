@@ -46,7 +46,7 @@ release:
     Welcome to this new release!
   footer: |
     ## Thanks
-    
+
     Those were the changes on {{ .Tag }}!
 
 changelog:
