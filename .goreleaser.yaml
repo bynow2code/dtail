@@ -39,6 +39,7 @@ archives:
 
 release:
   name_template: "v{{ .Version }}"
+  target_commitish: "{{ .Commit }}"
 
 changelog:
   sort: asc
