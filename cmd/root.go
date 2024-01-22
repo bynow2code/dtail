@@ -43,10 +43,8 @@ type config struct {
 
 // rootCmd represents the base command when called without any subcommands
 var rootCmd = &cobra.Command{
-	Use: "dtail",
-	Long: `dtail 是一个类似于 tail -f 的工具，专为文件夹设计。它可以持续监控文件夹内的最新文件，并将新写入的内容输出到终端。
-特别适用于按小时等更细粒度切割生成新文件的日志系统。
-更多信息：https://github.com/bynow2code/dtail`,
+	Use:   "dtail",
+	Short: `Dtail is a command-line tool similar to the unix command tail -f, with the difference that dtail is designed for working with directories.`,
 }
 
 func Execute() {
