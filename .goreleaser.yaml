@@ -65,5 +65,5 @@ changelog:
     - title: "Bug fixes"
       regexp: '^.*?bug(\([[:word:]]+\))??!?:.+$'
       order: 1
-    - title: Others
+    - title: "Other work"
       order: 999
