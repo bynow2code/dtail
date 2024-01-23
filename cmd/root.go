@@ -70,7 +70,7 @@ func initConfig() {
 	}
 
 	if err := viper.ReadInConfig(); err == nil {
-		util.PrintInfo("Use config file:", viper.ConfigFileUsed(), '.')
+		util.PrintInfo("Use config file:", viper.ConfigFileUsed(), ".")
 	} else {
 		cobra.CheckErr(err)
 	}
