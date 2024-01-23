@@ -23,28 +23,26 @@ package cmd
 
 import (
 	"fmt"
-	"os"
-
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
+	"os"
 )
 
-var cfgFile string
-var appConfig = config{DirectoryAliasMap: make(map[string]*aliasConfig)}
-
-type aliasConfig struct {
-	Path string `mapstructure:"path"`
-}
-
 type config struct {
-	force             bool
-	DirectoryAliasMap map[string]*aliasConfig `mapstructure:"directory-alias-map"`
+	force           bool
+	FolderShorthand map[string]shorthandConfig `mapstructure:"folder_shorthand" yaml:"folder_shorthand"`
 }
 
-// rootCmd represents the base command when called without any subcommands
+type shorthandConfig struct {
+	FolderPath string `mapstructure:"folder_path" yaml:"folder_path"`
+}
+
+var cfgFile string
+var appCfg = config{FolderShorthand: make(map[string]shorthandConfig)}
+
 var rootCmd = &cobra.Command{
 	Use:   "dtail",
-	Short: `Dtail is a command-line tool similar to the unix command tail -f, with the difference that dtail is designed for working with directories.`,
+	Short: `Dtail is a command-line tool similar to the unix command tail -f, with the difference that dtail is designed for folder.`,
 }
 
 func Execute() {
@@ -56,10 +54,9 @@ func init() {
 	cobra.OnInitialize(initConfig)
 
 	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dtail.yaml)")
-	rootCmd.PersistentFlags().BoolVarP(&appConfig.force, "force", "f", false, "强制操作")
+	rootCmd.PersistentFlags().BoolVarP(&appCfg.force, "force", "f", false, "force")
 }
 
-// initConfig reads in config file and ENV variables if set.
 func initConfig() {
 	if cfgFile != "" {
 		viper.SetConfigFile(cfgFile)
@@ -72,13 +69,12 @@ func initConfig() {
 		viper.SetConfigName(".dtail")
 	}
 
-	// If a config file is found, read it in.
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "使用配置文件:", viper.ConfigFileUsed())
+		fmt.Fprintln(os.Stderr, "Use config file:", viper.ConfigFileUsed())
 	} else {
 		cobra.CheckErr(err)
 	}
 
-	err := viper.Unmarshal(&appConfig)
+	err := viper.Unmarshal(&appCfg)
 	cobra.CheckErr(err)
 }

@@ -27,19 +27,18 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// watchCmd represents the watch command
 var watchCmd = &cobra.Command{
 	Use:   "watch",
 	Short: "持续输出目录别名对应路径内最新的日志",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		dieAlias := args[0]
-		aliasConfig, ok := appConfig.DirectoryAliasMap[dieAlias]
+		aliasConfig, ok := appCfg.FolderShorthand[dieAlias]
 		if !ok {
-			util.PrintFatalError("不存在的目录别名")
+			util.FatalError("不存在的目录别名")
 		}
 
-		internal.NewTailDir(aliasConfig.Path)
+		internal.NewTailDir(aliasConfig.FolderPath)
 	},
 }
 

@@ -5,7 +5,8 @@ import (
 	"os"
 )
 
-func PrintFatalError(a ...any) {
-	fmt.Fprintln(os.Stderr, a)
+func FatalError(a ...any) {
+	fmt.Fprint(os.Stderr, "dtail：")
+	fmt.Fprintln(os.Stderr, a...)
 	os.Exit(1)
 }
