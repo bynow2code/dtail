@@ -22,7 +22,7 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"fmt"
+	"dTail/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
@@ -70,7 +70,7 @@ func initConfig() {
 	}
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Use config file:", viper.ConfigFileUsed(), '.')
+		util.PrintInfo("Use config file:", viper.ConfigFileUsed(), '.')
 	} else {
 		cobra.CheckErr(err)
 	}

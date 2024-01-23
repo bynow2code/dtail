@@ -11,7 +11,7 @@ func PrintError(a ...any) {
 	os.Exit(1)
 }
 
-func printInfo(a ...any) {
+func PrintInfo(a ...any) {
 	fmt.Fprint(os.Stdout, "dtail:")
 	fmt.Fprintln(os.Stdout, a...)
 }

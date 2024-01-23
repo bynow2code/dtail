@@ -34,6 +34,19 @@ var shorthandCmd = &cobra.Command{
 	Short: "Manage folder shorthand for dtail.",
 }
 
+var listCmd = &cobra.Command{
+	Use:   "list",
+	Short: "List existing shorthands.",
+	Run: func(cmd *cobra.Command, args []string) {
+		tw := table.NewWriter()
+		tw.AppendHeader(table.Row{"shorthand name", "folder path"})
+		for shorthandName, shorthandConfig := range appCfg.FolderShorthand {
+			tw.AppendRow(table.Row{shorthandName, shorthandConfig.FolderPath})
+		}
+		fmt.Println(tw.Render())
+	},
+}
+
 var addCmd = &cobra.Command{
 	Use:   "add [shorthand name] [folder absolute path]",
 	Short: "Add shorthand name for a folder path.",
@@ -54,7 +67,7 @@ var addCmd = &cobra.Command{
 		err := viper.WriteConfig()
 		cobra.CheckErr(err)
 
-		fmt.Println("Configuration file has been written.")
+		util.PrintInfo("Configuration file has been written.")
 	},
 }
 
@@ -72,24 +85,11 @@ var removeCmd = &cobra.Command{
 		err := viper.WriteConfig()
 		cobra.CheckErr(err)
 
-		fmt.Println("Configuration file has been written.")
-	},
-}
-
-var listCmd = &cobra.Command{
-	Use:   "list",
-	Short: "List existing shorthands.",
-	Run: func(cmd *cobra.Command, args []string) {
-		tw := table.NewWriter()
-		tw.AppendHeader(table.Row{"shorthand name", "folder path"})
-		for shorthandName, shorthandConfig := range appCfg.FolderShorthand {
-			tw.AppendRow(table.Row{shorthandName, shorthandConfig.FolderPath})
-		}
-		fmt.Println(tw.Render())
+		util.PrintInfo("Configuration file has been written.")
 	},
 }
 
 func init() {
-	shorthandCmd.AddCommand(addCmd, removeCmd, listCmd)
+	shorthandCmd.AddCommand(listCmd, addCmd, removeCmd)
 	rootCmd.AddCommand(shorthandCmd)
 }
