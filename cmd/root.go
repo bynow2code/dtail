@@ -53,7 +53,7 @@ func Execute() {
 func init() {
 	cobra.OnInitialize(initConfig)
 
-	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dtail.yaml)")
+	rootCmd.PersistentFlags().StringVar(&cfgFile, "config", "", "config file (default is $HOME/.dtail.yaml).")
 	rootCmd.PersistentFlags().BoolVarP(&appCfg.force, "force", "f", false, "force")
 }
 
@@ -70,7 +70,7 @@ func initConfig() {
 	}
 
 	if err := viper.ReadInConfig(); err == nil {
-		fmt.Fprintln(os.Stderr, "Use config file:", viper.ConfigFileUsed())
+		fmt.Fprintln(os.Stderr, "Use config file:", viper.ConfigFileUsed(), '.')
 	} else {
 		cobra.CheckErr(err)
 	}

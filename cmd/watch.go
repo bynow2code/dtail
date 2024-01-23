@@ -29,13 +29,13 @@ import (
 
 var watchCmd = &cobra.Command{
 	Use:   "watch",
-	Short: "持续输出目录别名对应路径内最新的日志",
+	Short: "",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		dieAlias := args[0]
-		aliasConfig, ok := appCfg.FolderShorthand[dieAlias]
+		shorthandName := args[0]
+		aliasConfig, ok := appCfg.FolderShorthand[shorthandName]
 		if !ok {
-			util.FatalError("不存在的目录别名")
+			util.PrintError("shorthand name that does not exist.")
 		}
 
 		internal.NewTailDir(aliasConfig.FolderPath)

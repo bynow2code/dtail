@@ -36,7 +36,7 @@ var shorthandCmd = &cobra.Command{
 
 var addCmd = &cobra.Command{
 	Use:   "add [shorthand name] [folder absolute path]",
-	Short: "Add shorthand for a folder path.",
+	Short: "Add shorthand name for a folder path.",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
 		shorthandName := args[0]
@@ -44,7 +44,7 @@ var addCmd = &cobra.Command{
 		if !appCfg.force {
 			_, ok := appCfg.FolderShorthand[shorthandName]
 			if ok {
-				util.FatalError("duplicate shorthand names: ", shorthandName, ", use -f to override.")
+				util.PrintError("duplicate shorthand names: ", shorthandName, ", use -f to override.")
 			}
 		}
 
