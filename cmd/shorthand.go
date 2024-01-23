@@ -67,7 +67,7 @@ var addCmd = &cobra.Command{
 		err := viper.WriteConfig()
 		cobra.CheckErr(err)
 
-		util.PrintInfo("Configuration file has been written.")
+		util.PrintInfo("configuration file has been written.")
 	},
 }
 
@@ -85,7 +85,7 @@ var removeCmd = &cobra.Command{
 		err := viper.WriteConfig()
 		cobra.CheckErr(err)
 
-		util.PrintInfo("Configuration file has been written.")
+		util.PrintInfo("configuration file has been written.")
 	},
 }
 
