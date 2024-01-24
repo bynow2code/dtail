@@ -29,40 +29,40 @@ import (
 	"github.com/spf13/viper"
 )
 
-var shorthandCmd = &cobra.Command{
-	Use:   "shorthand",
-	Short: "Manage folder shorthand for dtail.",
+var qafCmd = &cobra.Command{
+	Use:   "qaf",
+	Short: "Quick Access to Folders.",
 }
 
 var listCmd = &cobra.Command{
 	Use:   "list",
-	Short: "List existing shorthands.",
+	Short: "List all shortcut configurations.",
 	Run: func(cmd *cobra.Command, args []string) {
 		tw := table.NewWriter()
-		tw.AppendHeader(table.Row{"shorthand name", "folder path"})
-		for shorthandName, shorthandConfig := range appCfg.FolderShorthand {
-			tw.AppendRow(table.Row{shorthandName, shorthandConfig.FolderPath})
+		tw.AppendHeader(table.Row{"shortcut", "folder path"})
+		for shortcut, shortcutEntry := range appCfg.Qaf {
+			tw.AppendRow(table.Row{shortcut, shortcutEntry.FolderPath})
 		}
 		fmt.Println(tw.Render())
 	},
 }
 
 var addCmd = &cobra.Command{
-	Use:   "add [shorthand name] [folder absolute path]",
-	Short: "Add shorthand name for a folder path.",
+	Use:   "add [shortcut] [folder absolute path]",
+	Short: "Add a shortcut to the Folder's Path.",
 	Args:  cobra.ExactArgs(2),
 	Run: func(cmd *cobra.Command, args []string) {
-		shorthandName := args[0]
+		shortcut := args[0]
 		folderPath := args[1]
 		if !appCfg.force {
-			_, ok := appCfg.FolderShorthand[shorthandName]
+			_, ok := appCfg.Qaf[shortcut]
 			if ok {
-				util.PrintError("duplicate shorthand names: ", shorthandName, ", use -f to override.")
+				util.PrintError("duplicate shortcut, use -f to overwrite")
 			}
 		}
 
-		appCfg.FolderShorthand[shorthandName] = shorthandConfig{FolderPath: folderPath}
-		viper.Set("folder_shorthand", appCfg.FolderShorthand)
+		appCfg.Qaf[shortcut] = qafEntry{FolderPath: folderPath}
+		viper.Set("qaf", appCfg.Qaf)
 
 		err := viper.WriteConfig()
 		cobra.CheckErr(err)
@@ -72,15 +72,22 @@ var addCmd = &cobra.Command{
 }
 
 var removeCmd = &cobra.Command{
-	Use:   "remove [shorthand name]",
-	Short: "Remove one or more shorthand names, if the shorthand name does not exist, the error will be skipped.",
+	Use:   "remove [shortcut1] [shortcut2] ...",
+	Short: "Remove the shortcut configuration for the folder, if deleting multiple shortcuts at once, any non-existent shortcuts will be ignored.",
 	Args:  cobra.MinimumNArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		for _, v := range args {
-			delete(appCfg.FolderShorthand, v)
+		if len(args) == 1 {
+			_, ok := appCfg.Qaf[args[0]]
+			if !ok {
+				util.PrintError("shortcut does not exist.")
+			}
+		} else {
+			for _, v := range args {
+				delete(appCfg.Qaf, v)
+			}
 		}
 
-		viper.Set("folder_shorthand", appCfg.FolderShorthand)
+		viper.Set("qaf", appCfg.Qaf)
 
 		err := viper.WriteConfig()
 		cobra.CheckErr(err)
@@ -90,6 +97,6 @@ var removeCmd = &cobra.Command{
 }
 
 func init() {
-	shorthandCmd.AddCommand(listCmd, addCmd, removeCmd)
-	rootCmd.AddCommand(shorthandCmd)
+	qafCmd.AddCommand(listCmd, addCmd, removeCmd)
+	rootCmd.AddCommand(qafCmd)
 }

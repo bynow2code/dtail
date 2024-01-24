@@ -32,13 +32,13 @@ var watchCmd = &cobra.Command{
 	Short: "",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
-		shorthandName := args[0]
-		aliasConfig, ok := appCfg.FolderShorthand[shorthandName]
+		shortcut := args[0]
+		shortcutEntry, ok := appCfg.Qaf[shortcut]
 		if !ok {
-			util.PrintError("shorthand name that does not exist.")
+			util.PrintError("shortcut does not exist.")
 		}
 
-		internal.NewTailDir(aliasConfig.FolderPath)
+		internal.NewTailDir(shortcutEntry.FolderPath)
 	},
 }
 

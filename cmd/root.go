@@ -29,16 +29,16 @@ import (
 )
 
 type config struct {
-	force           bool
-	FolderShorthand map[string]shorthandConfig `mapstructure:"folder_shorthand" yaml:"folder_shorthand"`
+	force bool
+	Qaf   map[string]qafEntry `yaml:"qaf"`
 }
 
-type shorthandConfig struct {
+type qafEntry struct {
 	FolderPath string `mapstructure:"folder_path" yaml:"folder_path"`
 }
 
+var appCfg = config{Qaf: make(map[string]qafEntry)}
 var cfgFile string
-var appCfg = config{FolderShorthand: make(map[string]shorthandConfig)}
 
 var rootCmd = &cobra.Command{
 	Use:   "dtail",
