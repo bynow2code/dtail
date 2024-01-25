@@ -27,3 +27,7 @@ Output:
 Start working with the shortcut.
 
     dtail work logall
+
+# Recent plans
+
+- [ ] Code optimization
