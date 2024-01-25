@@ -81,10 +81,10 @@ var removeCmd = &cobra.Command{
 			if !ok {
 				util.PrintError("shortcut does not exist.")
 			}
-		} else {
-			for _, v := range args {
-				delete(appCfg.Qaf, v)
-			}
+		}
+
+		for _, v := range args {
+			delete(appCfg.Qaf, v)
 		}
 
 		viper.Set("qaf", appCfg.Qaf)
