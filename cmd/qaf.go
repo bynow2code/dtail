@@ -57,7 +57,7 @@ var addCmd = &cobra.Command{
 		if !appCfg.force {
 			_, ok := appCfg.Qaf[shortcut]
 			if ok {
-				util.PrintError("duplicate shortcut, use -f to overwrite")
+				util.PrintError("duplicate shortcut, use -f to overwrite.")
 			}
 		}
 
