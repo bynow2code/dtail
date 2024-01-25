@@ -29,7 +29,12 @@ archives:
   - id: "dtail-archive"
     builds:
       - "dtail-build"
-    name_template: "{{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ .Arch }}"
+    name_template: >-
+      {{ .ProjectName }}_
+      {{ .Version }}_
+      {{- if eq .Os "darwin" }}macos_
+      {{- else }}{{.Os}}{{ end }}
+      {{ .Arch }}
     format_overrides:
       - goos: windows
         format: zip
