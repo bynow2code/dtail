@@ -44,13 +44,10 @@ archives:
 release:
   name_template: "v{{ .Version }}"
   header: |
-    Welcome to this new release!
-  footer: |
-    Thanks
-
-    Those were the changes on {{ .Tag }}!
+    Welcome to this new release {{ .Tag }}!
 
 changelog:
+  disable: true
   sort: asc
   use: github
   filters:
@@ -64,7 +61,7 @@ changelog:
       regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
       order: 0
     - title: "Bug fixes"
-      regexp: '^.*?bug(\([[:word:]]+\))??!?:.+$'
+      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
       order: 1
     - title: "Other work"
       order: 999
