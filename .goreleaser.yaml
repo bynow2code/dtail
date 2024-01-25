@@ -45,3 +45,8 @@ release:
   name_template: "v{{ .Version }}"
   header: |
     Welcome to this new release {{ .Tag }}!
+
+# .goreleaser.yml
+changelog:
+  # Set this to true if you don't want any changelog at all.
+  skip: true
