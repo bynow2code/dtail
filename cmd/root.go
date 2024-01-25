@@ -26,6 +26,7 @@ import (
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"
+	"path"
 )
 
 type config struct {
@@ -64,17 +65,28 @@ func initConfig() {
 		home, err := os.UserHomeDir()
 		cobra.CheckErr(err)
 
-		viper.AddConfigPath(home)
-		viper.SetConfigType("yaml")
-		viper.SetConfigName(".dtail")
+		defaultCfg := path.Join(home, ".dtail.yaml")
+
+		_, err = os.Stat(defaultCfg)
+		if err != nil {
+			if os.IsNotExist(err) {
+				_, err = os.Create(defaultCfg)
+				if err != nil {
+					util.PrintError(err)
+				}
+			}
+		}
+
+		viper.SetConfigFile(defaultCfg)
 	}
 
-	if err := viper.ReadInConfig(); err == nil {
-		util.PrintInfo("use config file:", viper.ConfigFileUsed(), ".")
+	err := viper.ReadInConfig()
+	if err != nil {
+		util.PrintError(err)
 	} else {
-		cobra.CheckErr(err)
+		util.PrintInfo("use config file:", viper.ConfigFileUsed(), ".")
 	}
 
-	err := viper.Unmarshal(&appCfg)
+	err = viper.Unmarshal(&appCfg)
 	cobra.CheckErr(err)
 }
