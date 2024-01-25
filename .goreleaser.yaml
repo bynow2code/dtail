@@ -46,22 +46,21 @@ release:
   header: |
     Welcome to this new release {{ .Tag }}!
 
-changelog:
-  disable: true
-  sort: asc
-  use: github
-  filters:
-    exclude:
-      - merge conflict
-      - Merge pull request
-      - Merge remote-tracking branch
-      - Merge branch
-  groups:
-    - title: "New Features"
-      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
-      order: 0
-    - title: "Bug fixes"
-      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
-      order: 1
-    - title: "Other work"
-      order: 999
+#changelog:
+#  sort: asc
+#  use: github
+#  filters:
+#    exclude:
+#      - merge conflict
+#      - Merge pull request
+#      - Merge remote-tracking branch
+#      - Merge branch
+#  groups:
+#    - title: "New Features"
+#      regexp: '^.*?feat(\([[:word:]]+\))??!?:.+$'
+#      order: 0
+#    - title: "Bug fixes"
+#      regexp: '^.*?fix(\([[:word:]]+\))??!?:.+$'
+#      order: 1
+#    - title: "Other work"
+#      order: 999
