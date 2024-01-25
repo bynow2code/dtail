@@ -27,9 +27,9 @@ import (
 	"github.com/spf13/cobra"
 )
 
-var watchCmd = &cobra.Command{
-	Use:   "watch",
-	Short: "",
+var workCmd = &cobra.Command{
+	Use:   "work [shortcut]",
+	Short: "Start working with the shortcut.",
 	Args:  cobra.ExactArgs(1),
 	Run: func(cmd *cobra.Command, args []string) {
 		shortcut := args[0]
@@ -43,5 +43,5 @@ var watchCmd = &cobra.Command{
 }
 
 func init() {
-	rootCmd.AddCommand(watchCmd)
+	rootCmd.AddCommand(workCmd)
 }

@@ -26,4 +26,4 @@ Output:
 
 Start working with the shortcut.
 
-    dtail watch logall
+    dtail work logall
