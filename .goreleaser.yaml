@@ -27,6 +27,7 @@ builds:
 
 archives:
   - id: "dtail-archive"
+    wrap_in_directory: true
     builds:
       - "dtail-build"
     name_template: >-
