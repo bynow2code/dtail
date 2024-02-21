@@ -1,11 +1,11 @@
 package internal
 
 import (
-	"dTail/util"
+	"encoding/json"
 	"fmt"
-	"github.com/inconshreveable/go-update"
+	"io"
 	"net/http"
-	"os"
+	"runtime"
 	"testing"
 )
 
@@ -14,24 +14,46 @@ func TestNewTailDir(t *testing.T) {
 	NewTailDir(dirname)
 }
 
+type Release struct {
+	TagName string  `json:"tag_name"`
+	Assets  []Asset `json:"assets"`
+}
+
+type Asset struct {
+	Name string `json:"name"`
+}
+
 func TestDoUpdate(t *testing.T) {
-	url := "https://github.com/bynow2code/dtail/releases/download/v0.0.3/dtail_0.0.3_macos_arm64.tar.gz"
+	url := "https://api.github.com/repos/bynow2code/dtail/releases/latest"
 	resp, err := http.Get(url)
 	if err != nil {
-		t.Error(err)
+		fmt.Println(err)
+		return
 	}
 	defer resp.Body.Close()
 
-	util.Unzip(resp.Body)
-
-	open, err := os.Open("/Users/edy/dtail_0.0.3_macos_arm64/dtail")
-	if err != nil {
-		return
-	}
-	err = update.Apply(open, update.Options{})
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		fmt.Println(err)
-		os.Exit(1)
+		return
 	}
 
+	var release Release
+	if err := json.Unmarshal(body, &release); err != nil {
+		fmt.Println(err)
+		return
+	}
+
+	fmt.Println("最新版本：", release.TagName)
+
+	systemOS := runtime.GOOS
+	if systemOS == "darwin" {
+		systemOS = "macos"
+	}
+	systemARCH := runtime.GOARCH
+
+	compressionFormat := ".tar.gz"
+
+	filename := fmt.Sprintf("dtail_%s_%s_%s_%s", release.TagName, systemOS, systemARCH, compressionFormat)
+	fmt.Println(filename)
 }
