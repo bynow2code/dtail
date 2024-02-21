@@ -2,7 +2,10 @@ package internal
 
 import (
 	"dTail/util"
+	"fmt"
+	"github.com/inconshreveable/go-update"
 	"net/http"
+	"os"
 	"testing"
 )
 
@@ -21,9 +24,14 @@ func TestDoUpdate(t *testing.T) {
 
 	util.Unzip(resp.Body)
 
-	//err := update.Apply(resp.Body, update.Options{})
-	//if err != nil {
-	//	// error handling
-	//}
-	//return err
+	open, err := os.Open("/Users/edy/dtail_0.0.3_macos_arm64/dtail")
+	if err != nil {
+		return
+	}
+	err = update.Apply(open, update.Options{})
+	if err != nil {
+		fmt.Println(err)
+		os.Exit(1)
+	}
+
 }

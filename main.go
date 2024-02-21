@@ -22,9 +22,47 @@ THE SOFTWARE.
 package main
 
 import (
+	"bufio"
 	"dTail/cmd"
+	"dTail/util"
+	"fmt"
+	"github.com/inconshreveable/go-update"
+	"net/http"
+	"os"
+	"strings"
 )
 
 func main() {
+	fmt.Println("检测到新版本，是否现在升级(y/n): ")
+	reader := bufio.NewReader(os.Stdin)
+	readString, err := reader.ReadString('\n')
+	if err != nil {
+		fmt.Println(err)
+	}
+	text := strings.Replace(readString, "\n", "", -1)
+	if text == "y" {
+		fmt.Println("开始升级...")
+
+		url := "https://github.com/bynow2code/dtail/releases/download/v0.0.3/dtail_0.0.3_macos_arm64.tar.gz"
+		resp, err := http.Get(url)
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+		defer resp.Body.Close()
+
+		util.Unzip(resp.Body)
+
+		open, err := os.Open("/Users/edy/dtail_0.0.3_macos_arm64/dtail")
+		if err != nil {
+			return
+		}
+		err = update.Apply(open, update.Options{})
+		if err != nil {
+			fmt.Println(err)
+			os.Exit(1)
+		}
+	}
+
 	cmd.Execute()
 }
