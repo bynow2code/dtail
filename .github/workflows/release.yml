@@ -1,8 +1,10 @@
 name: Release
 on:
-  create:
+  push:
     tags:
-      -*
+      - '*'
+    branches:
+      - main
 
 jobs:
   release:
