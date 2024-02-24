@@ -36,9 +36,6 @@ archives:
       {{ .ProjectName }}_v{{- .Version }}_
       {{- if eq .Os "darwin" }}macos_{{ else }}{{ .Os }}_{{ end }}
       {{- .Arch }}
-    format_overrides:
-      - goos: windows
-        format: zip
     files:
       - LICENSE
       - README.md
