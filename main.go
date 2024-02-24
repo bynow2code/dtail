@@ -21,48 +21,98 @@ THE SOFTWARE.
 */
 package main
 
-import (
-	"bufio"
-	"dTail/cmd"
-	"dTail/util"
-	"fmt"
-	"github.com/inconshreveable/go-update"
-	"net/http"
-	"os"
-	"strings"
-)
+import "github.com/bynow2code/dtail/internal"
+
+type Release struct {
+	TagName string  `json:"tag_name"`
+	Assets  []Asset `json:"assets"`
+}
+
+type Asset struct {
+	Name string `json:"name"`
+}
 
 func main() {
-	fmt.Println("检测到新版本，是否现在升级(y/n): ")
-	reader := bufio.NewReader(os.Stdin)
-	readString, err := reader.ReadString('\n')
-	if err != nil {
-		fmt.Println(err)
-	}
-	text := strings.Replace(readString, "\n", "", -1)
-	if text == "y" {
-		fmt.Println("开始升级...")
+	internal.NewRelease().Latest()
 
-		url := "https://github.com/bynow2code/dtail/releases/download/v0.0.3/dtail_0.0.3_macos_arm64.tar.gz"
-		resp, err := http.Get(url)
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-		defer resp.Body.Close()
-
-		util.Unzip(resp.Body)
-
-		open, err := os.Open("/Users/edy/dtail_0.0.3_macos_arm64/dtail")
-		if err != nil {
-			return
-		}
-		err = update.Apply(open, update.Options{})
-		if err != nil {
-			fmt.Println(err)
-			os.Exit(1)
-		}
-	}
-
-	cmd.Execute()
+	//fmt.Println("当前软件版本：", cmd.Version)
+	//fmt.Println("获取最新版本中...")
+	//
+	//url := "https://api.github.com/repos/bynow2code/dtail/releases/latest"
+	//resp, err := http.Get(url)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//defer resp.Body.Close()
+	//
+	//body, err := io.ReadAll(resp.Body)
+	//if err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//
+	//var release Release
+	//if err := json.Unmarshal(body, &release); err != nil {
+	//	fmt.Println(err)
+	//	return
+	//}
+	//
+	//fmt.Println("最新版本：", release.TagName)
+	//
+	//systemOS := runtime.GOOS
+	//if systemOS == "darwin" {
+	//	systemOS = "macos"
+	//}
+	//systemARCH := runtime.GOARCH
+	//
+	//compressionFormat := ".tar.gz"
+	//
+	//filename := fmt.Sprintf("dtail_%s_%s_%s_%s", release.TagName, systemOS, systemARCH, compressionFormat)
+	//fmt.Println(filename)
+	//
+	//curVersion, err := version.NewVersion(cmd.Version)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	//
+	//newVersion, err := version.NewVersion(release.TagName)
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
+	//
+	//if curVersion.LessThan(newVersion) {
+	//	fmt.Println("检测到新版本，是否现在升级(y/n): ")
+	//	reader := bufio.NewReader(os.Stdin)
+	//	readString, err := reader.ReadString('\n')
+	//	if err != nil {
+	//		fmt.Println(err)
+	//	}
+	//	text := strings.Replace(readString, "\n", "", -1)
+	//	if text == "y" {
+	//		fmt.Println("开始升级...")
+	//
+	//		url := "https://github.com/bynow2code/dtail/releases/download/v0.0.3/dtail_0.0.3_macos_arm64.tar.gz"
+	//		resp, err := http.Get(url)
+	//		if err != nil {
+	//			fmt.Println(err)
+	//			os.Exit(1)
+	//		}
+	//		defer resp.Body.Close()
+	//
+	//		util.Unzip(resp.Body)
+	//
+	//		open, err := os.Open("/Users/edy/dtail_0.0.3_macos_arm64/dtail")
+	//		if err != nil {
+	//			return
+	//		}
+	//		err = update.Apply(open, update.Options{})
+	//		if err != nil {
+	//			fmt.Println(err)
+	//			os.Exit(1)
+	//		}
+	//	}
+	//}
+	//
+	//cmd.Execute()
 }

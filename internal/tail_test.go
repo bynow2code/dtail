@@ -14,15 +14,6 @@ func TestNewTailDir(t *testing.T) {
 	NewTailDir(dirname)
 }
 
-type Release struct {
-	TagName string  `json:"tag_name"`
-	Assets  []Asset `json:"assets"`
-}
-
-type Asset struct {
-	Name string `json:"name"`
-}
-
 func TestDoUpdate(t *testing.T) {
 	url := "https://api.github.com/repos/bynow2code/dtail/releases/latest"
 	resp, err := http.Get(url)

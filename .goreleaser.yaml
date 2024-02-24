@@ -14,6 +14,8 @@ before:
 
 builds:
   - id: "dtail-build"
+    ldflags:
+      - -s -w -X "github.com/bynow2code/dtail/cmd.Version={{.Version}}"
     binary: dtail
     env:
       - CGO_ENABLED=0
@@ -39,9 +41,9 @@ archives:
       - README.md
 
 release:
-  name_template: "v{{ .Version }}"
+  name_template: "{{ .Version }}"
   header: |
-    Welcome to this new release {{ .Tag }}!
+    Welcome to this new release {{ .Version }}!
 
 changelog:
   skip: true

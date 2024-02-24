@@ -22,7 +22,7 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"dTail/util"
+	"github.com/bynow2code/dtail/util"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"
 	"os"

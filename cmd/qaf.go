@@ -22,8 +22,8 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"dTail/util"
 	"fmt"
+	"github.com/bynow2code/dtail/util"
 	"github.com/jedib0t/go-pretty/v6/table"
 	"github.com/spf13/cobra"
 	"github.com/spf13/viper"

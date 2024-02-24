@@ -1,5 +1,5 @@
 /*
-Copyright © 2024 changqq <https://github.com/bynow2code/dtail>
+Copyright © 2024 changqq <https://gitee.com/bynow2code/dtail>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -22,26 +22,25 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
 	"github.com/bynow2code/dtail/internal"
-	"github.com/bynow2code/dtail/util"
 	"github.com/spf13/cobra"
 )
 
-var workCmd = &cobra.Command{
-	Use:   "work [shortcut]",
-	Short: "Start working with the shortcut.",
-	Args:  cobra.ExactArgs(1),
-	Run: func(cmd *cobra.Command, args []string) {
-		shortcut := args[0]
-		shortcutEntry, ok := appCfg.Qaf[shortcut]
-		if !ok {
-			util.PrintError("shortcut does not exist.")
-		}
+var versionCmd = &cobra.Command{
+	Use:   "version",
+	Short: "A brief description of your command",
+	Long: `A longer description that spans multiple lines and likely contains examples
+and usage of using your command. For example:
 
-		internal.NewTailDir(shortcutEntry.FolderPath)
+Cobra is a CLI library for Go that empowers applications.
+This application is a tool to generate the needed files
+to quickly create a Cobra application.`,
+	Run: func(cmd *cobra.Command, args []string) {
+		fmt.Println("version:", internal.Version)
 	},
 }
 
 func init() {
-	rootCmd.AddCommand(workCmd)
+	rootCmd.AddCommand(versionCmd)
 }
