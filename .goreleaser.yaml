@@ -33,7 +33,7 @@ archives:
     builds:
       - "dtail-build"
     name_template: >-
-      {{- .ProjectName }}_{{- .Version }}_
+      {{ .ProjectName }}_v{{- .Version }}_
       {{- if eq .Os "darwin" }}macos_{{ else }}{{ .Os }}_{{ end }}
       {{- .Arch }}
     files:
@@ -41,9 +41,9 @@ archives:
       - README.md
 
 release:
-  name_template: "{{ .Version }}"
+  name_template: "v{{ .Version }}"
   header: |
-    Welcome to this new release {{ .Version }}!
+    Welcome to this new release v{{ .Version }}!
 
 changelog:
   skip: true
