@@ -240,14 +240,31 @@ func (f *TarGzUpgradeFile) Do() error {
 	return err
 }
 
-func checkVersion() {
+func CheckUpgrade() {
+	defer func() {
+		if r := recover(); r != nil {
+			util.PrintInfo("An exception occurred during the update process", r)
+		}
+	}()
+
 	release := NewGithubRelease()
 	err := release.Latest()
 	if err != nil {
 		panic(err)
 	}
-
-	fmt.Sprintf("Current version: %s, new version: %s, please use dtail upgrade to ask for upgrade", Version, release.Version())
+	oldVersion, err := version.NewVersion(Version)
+	if err != nil {
+		panic(err)
+	}
+	newVersion, err := version.NewVersion(release.Version())
+	if err != nil {
+		panic(err)
+	}
+	if oldVersion.LessThan(newVersion) {
+		fmt.Sprintf("Current version: %s, new version: %s, please use dtail upgrade to ask for upgrade", Version, release.Version())
+	} else {
+		util.PrintInfo("the version is already up to date and no update is required")
+	}
 }
 
 func AskUpgrade(direct bool) {
