@@ -15,6 +15,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 	"time"
 )
 
@@ -298,12 +299,14 @@ func AskUpgrade(direct bool) {
 	}
 
 	buf := bufio.NewReader(os.Stdin)
-	answer, err := buf.ReadString('\n')
+	input, err := buf.ReadString('\n')
 	if err != nil {
 		panic(err)
 	}
 
-	if direct || answer == "y" {
+	input = strings.TrimSpace(input)
+
+	if direct || input == "y" {
 		util.PrintInfo("upgrading in progress")
 
 		err = release.Upgrade()
