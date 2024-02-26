@@ -11,12 +11,7 @@ func TestGithubRelease_Latest(t *testing.T) {
 		t.Error(err)
 	}
 
-	file, err := release.UpgradeFile()
-	if err != nil {
-		t.Error(err)
-	}
-
-	err = file.DoUpgrade()
+	err = release.Upgrade()
 	if err != nil {
 		t.Error(err)
 	}

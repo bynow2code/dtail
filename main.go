@@ -24,34 +24,9 @@ package main
 import (
 	"github.com/bynow2code/dtail/cmd"
 	"github.com/bynow2code/dtail/internal"
-	"github.com/bynow2code/dtail/util"
 )
 
-type Release struct {
-	TagName string  `json:"tag_name"`
-	Assets  []Asset `json:"assets"`
-}
-
-type Asset struct {
-	Name string `json:"name"`
-}
-
 func main() {
-	release := internal.NewGithubRelease()
-	err := release.Latest()
-	if err != nil {
-		util.PrintError(err)
-	}
-
-	file, err := release.UpgradeFile()
-	if err != nil {
-		util.PrintError(err)
-	}
-
-	err = file.DoUpgrade()
-	if err != nil {
-		util.PrintError(err)
-	}
-
+	internal.AskUpgrade()
 	cmd.Execute()
 }

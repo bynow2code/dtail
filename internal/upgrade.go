@@ -2,10 +2,13 @@ package internal
 
 import (
 	"archive/tar"
+	"bufio"
 	"compress/gzip"
 	"encoding/json"
 	"errors"
 	"fmt"
+	"github.com/bynow2code/dtail/util"
+	"github.com/hashicorp/go-version"
 	"github.com/inconshreveable/go-update"
 	"io"
 	"net/http"
@@ -28,14 +31,14 @@ var (
 type Release interface {
 	Latest() error
 	Version() string
-	UpgradeFile() (Upgrade, error)
+	Upgrade() error
 }
 
-type Upgrade interface {
-	DoUpgrade() error
+type UpgradeFile interface {
+	Do() error
 }
 
-type GzTarUpgradeFile struct {
+type TarGzUpgradeFile struct {
 	Name        string
 	DownloadUrl string
 	LocalPath   string
@@ -84,8 +87,8 @@ func (g *GithubRelease) Latest() error {
 	return nil
 }
 
-func (g *GithubRelease) UpgradeFile() (Upgrade, error) {
-	upgrade := &GzTarUpgradeFile{}
+func (g *GithubRelease) UpgradeFile() (UpgradeFile, error) {
+	upgrade := &TarGzUpgradeFile{}
 	upgrade.Name = upgradeFileName(g.Version())
 	for _, asset := range g.Assets {
 		if asset.Name == upgrade.Name {
@@ -100,6 +103,19 @@ func (g *GithubRelease) UpgradeFile() (Upgrade, error) {
 	return upgrade, nil
 }
 
+func (g *GithubRelease) Upgrade() error {
+	upgrade, err := g.UpgradeFile()
+	if err != nil {
+		return err
+	}
+
+	err = upgrade.Do()
+	if err != nil {
+		return err
+	}
+	return nil
+}
+
 func upgradeFileName(version string) string {
 	goos := runtime.GOOS
 	if goos == "darwin" {
@@ -111,7 +127,7 @@ func upgradeFileName(version string) string {
 	return filename
 }
 
-func (f *GzTarUpgradeFile) download() error {
+func (f *TarGzUpgradeFile) download() error {
 	dir, err := os.UserHomeDir()
 	if err != nil {
 		return err
@@ -142,7 +158,7 @@ func (f *GzTarUpgradeFile) download() error {
 	return nil
 }
 
-func (f *GzTarUpgradeFile) extract() error {
+func (f *TarGzUpgradeFile) extract() error {
 	dir, err := os.UserHomeDir()
 	if err != nil {
 		return err
@@ -195,10 +211,15 @@ func (f *GzTarUpgradeFile) extract() error {
 			}
 		}
 	}
+
+	if f.UpgradePath == "" {
+		return errors.New("upgrade file not found in the archive")
+	}
+
 	return nil
 }
 
-func (f *GzTarUpgradeFile) DoUpgrade() error {
+func (f *TarGzUpgradeFile) Do() error {
 	err := f.download()
 	if err != nil {
 		return err
@@ -213,7 +234,57 @@ func (f *GzTarUpgradeFile) DoUpgrade() error {
 	if err != nil {
 		return err
 	}
+	defer open.Close()
 
 	err = update.Apply(open, update.Options{})
 	return err
+}
+
+func AskUpgrade() {
+	defer func() {
+		if r := recover(); r != nil {
+			util.PrintInfo("An exception occurred during the update process", r)
+		}
+	}()
+
+	release := NewGithubRelease()
+	err := release.Latest()
+	if err != nil {
+		panic(err)
+	}
+
+	util.PrintInfo("version", Version)
+	util.PrintInfo("new version", release.Version())
+	oldVersion, err := version.NewVersion(Version)
+	if err != nil {
+		panic(err)
+	}
+	newVersion, err := version.NewVersion(release.Version())
+	if err != nil {
+		panic(err)
+	}
+	if oldVersion.LessThan(newVersion) {
+		util.PrintInfo("is the current version outdated and should it be upgraded? (y)")
+	} else {
+		util.PrintInfo("the version is already up to date and no update is required")
+		return
+	}
+
+	buf := bufio.NewReader(os.Stdin)
+	answer, err := buf.ReadString('\n')
+	if err != nil {
+		panic(err)
+	}
+
+	if answer == "y" {
+		util.PrintInfo("upgrading in progress")
+
+		err = release.Upgrade()
+		if err != nil {
+			panic(err)
+		}
+
+		util.PrintInfo("upgrade completed")
+		os.Exit(0)
+	}
 }
