@@ -240,6 +240,16 @@ func (f *TarGzUpgradeFile) Do() error {
 	return err
 }
 
+func checkVersion() {
+	release := NewGithubRelease()
+	err := release.Latest()
+	if err != nil {
+		panic(err)
+	}
+
+	fmt.Sprintf("Current version: %s, new version: %s, please use dtail upgrade to ask for upgrade", Version, release.Version())
+}
+
 func AskUpgrade(direct bool) {
 	defer func() {
 		if r := recover(); r != nil {
