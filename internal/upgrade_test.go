@@ -1,7 +1,6 @@
 package internal
 
 import (
-	"fmt"
 	"testing"
 )
 
@@ -17,12 +16,13 @@ func TestGithubRelease_Latest(t *testing.T) {
 		t.Error(err)
 	}
 
-	err = file.Download()
+	err = file.DoUpgrade()
 	if err != nil {
 		t.Error(err)
 	}
 
-	fmt.Printf("%#v \n", file.Name)
-	fmt.Printf("%#v \n", file.DownloadUrl)
-	fmt.Printf("%#v \n", file.DownloadPath)
+	//fmt.Printf("%#v \n", file.Name)
+	//fmt.Printf("%#v \n", file.DownloadUrl)
+	//fmt.Printf("%#v \n", file.LocalPath)
+
 }
