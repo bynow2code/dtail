@@ -2,8 +2,8 @@ package internal
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
-	"github.com/bynow2code/dtail/util"
 	"io"
 	"net/http"
 	"runtime"
@@ -11,10 +11,14 @@ import (
 
 var Version string
 
+var (
+	ErrDownloadUrlEmpty = errors.New("download url is empty")
+)
+
 type Release interface {
-	Latest()
+	Latest() error
 	Version() string
-	UpgradeFile() *UpgradeFile
+	UpgradeFile() (*UpgradeFile, error)
 }
 
 type UpgradeFile struct {
@@ -40,27 +44,37 @@ func (g *GithubRelease) Version() string {
 	return g.TagName
 }
 
-func (g *GithubRelease) Latest() {
+func (g *GithubRelease) Latest() error {
 	url := "https://api.github.com/repos/bynow2code/dtail/releases/latest"
 	response, err := http.Get(url)
 	if err != nil {
-		util.PrintError("请求Github发生错误", response)
+		return err
 	}
 	jsonStr, err := io.ReadAll(response.Body)
 	if err != nil {
-		util.PrintError("读取Github返回值发生错误", err)
+		return err
 	}
 	err = json.Unmarshal(jsonStr, g)
 	if err != nil {
-		util.PrintError("解析Github返回值", err)
+		return err
 	}
+	return nil
 }
 
-func (g *GithubRelease) UpgradeFile() *UpgradeFile {
-	return &UpgradeFile{
-		Name:        upgradeFileName(g.Version()),
-		DownloadUrl: "",
+func (g *GithubRelease) UpgradeFile() (*UpgradeFile, error) {
+	upgrade := &UpgradeFile{}
+	upgrade.Name = upgradeFileName(g.Version())
+	for _, asset := range g.Assets {
+		if asset.Name == upgrade.Name {
+			upgrade.DownloadUrl = asset.DownloadUrl
+			break
+		}
 	}
+	if upgrade.DownloadUrl == "" {
+		return nil, ErrDownloadUrlEmpty
+	}
+
+	return upgrade, nil
 }
 
 func upgradeFileName(version string) string {
