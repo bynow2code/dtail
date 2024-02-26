@@ -253,6 +253,7 @@ func CheckUpgrade() {
 	if err != nil {
 		panic(err)
 	}
+	util.PrintInfo("current version: %s, new version: %s")
 	oldVersion, err := version.NewVersion(Version)
 	if err != nil {
 		panic(err)
@@ -262,7 +263,7 @@ func CheckUpgrade() {
 		panic(err)
 	}
 	if oldVersion.LessThan(newVersion) {
-		fmt.Sprintf("Current version: %s, new version: %s, please use dtail upgrade to ask for upgrade", Version, release.Version())
+		util.PrintInfo("please use dtail upgrade to ask for upgrade")
 	} else {
 		util.PrintInfo("the version is already up to date and no update is required")
 	}
