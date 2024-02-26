@@ -10,17 +10,18 @@ jobs:
     name: Release on GitHub
     runs-on: ubuntu-latest
     steps:
-      - name: Check out code
+      - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Validates GO releaser config
-        uses: docker://goreleaser/goreleaser:latest
+      - name: Set up Go
+        uses: actions/setup-go@v5
         with:
-          args: check
+          go-version: stable
 
       - name: Create release on GitHub
-        uses: docker://goreleaser/goreleaser:latest
+        uses: goreleaser/goreleaser-action@v5
         with:
+          version: latest
           args: release
         env:
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
