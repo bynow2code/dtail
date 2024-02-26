@@ -6,6 +6,8 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"os"
+	"path/filepath"
 	"runtime"
 )
 
@@ -22,8 +24,9 @@ type Release interface {
 }
 
 type UpgradeFile struct {
-	Name        string
-	DownloadUrl string
+	Name         string
+	DownloadUrl  string
+	DownloadPath string
 }
 
 type GithubRelease struct {
@@ -86,4 +89,35 @@ func upgradeFileName(version string) string {
 	//dtail_v0.0.1-alpha.1_linux_amd64.tar.gz
 	filename := fmt.Sprintf("dtail_%s_%s_%s.tar.gz", version, goos, arch)
 	return filename
+}
+
+type Upgrade interface {
+	Download() error
+	Extract() error
+}
+
+func (f *UpgradeFile) Download() error {
+	dir, err := os.UserHomeDir()
+	if err != nil {
+		return err
+	}
+	downloadPath := filepath.Join(dir, f.Name)
+	open, err := os.OpenFile(downloadPath, os.O_CREATE|os.O_RDWR, 0755)
+	if err != nil {
+		return err
+	}
+	response, err := http.Get(f.DownloadUrl)
+	if err != nil {
+		return err
+	}
+	_, err = io.Copy(open, response.Body)
+	if err != nil {
+		return err
+	}
+	f.DownloadPath = downloadPath
+	return nil
+}
+
+func (f *UpgradeFile) Extract() error {
+	return nil
 }

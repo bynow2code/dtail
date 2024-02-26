@@ -14,9 +14,15 @@ func TestGithubRelease_Latest(t *testing.T) {
 
 	file, err := release.UpgradeFile()
 	if err != nil {
-		return
+		t.Error(err)
+	}
+
+	err = file.Download()
+	if err != nil {
+		t.Error(err)
 	}
 
 	fmt.Printf("%#v \n", file.Name)
 	fmt.Printf("%#v \n", file.DownloadUrl)
+	fmt.Printf("%#v \n", file.DownloadPath)
 }
