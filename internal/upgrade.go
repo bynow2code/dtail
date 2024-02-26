@@ -240,7 +240,7 @@ func (f *TarGzUpgradeFile) Do() error {
 	return err
 }
 
-func AskUpgrade() {
+func AskUpgrade(direct bool) {
 	defer func() {
 		if r := recover(); r != nil {
 			util.PrintInfo("An exception occurred during the update process", r)
@@ -276,7 +276,7 @@ func AskUpgrade() {
 		panic(err)
 	}
 
-	if answer == "y" {
+	if direct || answer == "y" {
 		util.PrintInfo("upgrading in progress")
 
 		err = release.Upgrade()

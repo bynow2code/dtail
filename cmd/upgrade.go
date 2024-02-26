@@ -1,5 +1,5 @@
 /*
-Copyright © 2024 changqq <https://github.com/bynow2code/dtail>
+Copyright © 2024 changqq <https://gitee.com/bynow2code/dtail>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -19,12 +19,23 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 THE SOFTWARE.
 */
-package main
+package cmd
 
 import (
-	"github.com/bynow2code/dtail/cmd"
+	"github.com/bynow2code/dtail/internal"
+
+	"github.com/spf13/cobra"
 )
 
-func main() {
-	cmd.Execute()
+// upgradeCmd represents the upgrade command
+var upgradeCmd = &cobra.Command{
+	Use:   "upgrade",
+	Short: "Run check for new version and upgrade",
+	Run: func(cmd *cobra.Command, args []string) {
+		internal.AskUpgrade(false)
+	},
+}
+
+func init() {
+	rootCmd.AddCommand(upgradeCmd)
 }
