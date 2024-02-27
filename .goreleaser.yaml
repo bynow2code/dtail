@@ -33,7 +33,8 @@ archives:
     builds:
       - "dtail-build"
     name_template: >-
-      {{ .ProjectName }}_v{{- .Version }}_
+      {{ .ProjectName }}_v
+      {{- .Version }}_
       {{- if eq .Os "darwin" }}macos_{{ else }}{{ .Os }}_{{ end }}
       {{- .Arch }}
     files:
