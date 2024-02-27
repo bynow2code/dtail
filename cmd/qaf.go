@@ -22,6 +22,7 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"errors"
 	"fmt"
 	"github.com/bynow2code/dtail/util"
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -57,7 +58,7 @@ var addCmd = &cobra.Command{
 		if !appCfg.force {
 			_, ok := appCfg.Qaf[shortcut]
 			if ok {
-				util.PrintError("duplicate shortcut, use -f to overwrite.")
+				util.PrintFatal(errors.New("duplicate shortcut, use -f to overwrite"))
 			}
 		}
 
@@ -79,7 +80,7 @@ var removeCmd = &cobra.Command{
 		if len(args) == 1 {
 			_, ok := appCfg.Qaf[args[0]]
 			if !ok {
-				util.PrintError("shortcut does not exist.")
+				util.PrintFatal(errors.New("shortcut does not exist"))
 			}
 		}
 

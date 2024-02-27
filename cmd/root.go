@@ -72,7 +72,7 @@ func initConfig() {
 			if os.IsNotExist(err) {
 				_, err = os.Create(defaultCfg)
 				if err != nil {
-					util.PrintError(err)
+					util.PrintFatal(err)
 				}
 			}
 		}
@@ -82,7 +82,7 @@ func initConfig() {
 
 	err := viper.ReadInConfig()
 	if err != nil {
-		util.PrintError(err)
+		util.PrintFatal(err)
 	} else {
 		util.PrintInfo("use config file:", viper.ConfigFileUsed(), ".")
 	}

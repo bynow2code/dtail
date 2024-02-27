@@ -5,13 +5,15 @@ import (
 	"os"
 )
 
-func PrintError(a ...any) {
-	fmt.Fprint(os.Stderr, "dtail:")
-	fmt.Fprintln(os.Stderr, a...)
+func PrintError(err error) {
+	fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+}
+
+func PrintFatal(err error) {
+	fmt.Fprintf(os.Stderr, "Fatal error: %v\n", err)
 	os.Exit(1)
 }
 
 func PrintInfo(a ...any) {
-	fmt.Fprint(os.Stdout, "dtail:")
 	fmt.Fprintln(os.Stdout, a...)
 }
