@@ -23,10 +23,8 @@ package main
 
 import (
 	"github.com/bynow2code/dtail/cmd"
-	"github.com/bynow2code/dtail/internal"
 )
 
 func main() {
-	internal.CheckForUpdates()
 	cmd.Execute()
 }

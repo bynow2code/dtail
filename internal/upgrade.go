@@ -33,6 +33,7 @@ type Release interface {
 	Latest() error
 	Version() string
 	Upgrade() error
+	Compare() error
 }
 
 type UpgradeFile interface {
@@ -113,6 +114,25 @@ func (g *GithubRelease) Upgrade() error {
 	err = upgrade.Do()
 	if err != nil {
 		return err
+	}
+	return nil
+}
+
+func (g *GithubRelease) Compare() error {
+	oldVersion, err := version.NewVersion(Version)
+	if err != nil {
+		return err
+	}
+	newVersion, err := version.NewVersion(g.Version())
+	if err != nil {
+		return err
+	}
+
+	util.PrintlnInfof("Current version: %s", oldVersion)
+	util.PrintlnInfof("Latest version: %s", newVersion)
+
+	if oldVersion.LessThan(newVersion) {
+		util.PrintlnInfo("Please use the dtail upgrade command to perform software upgrades.")
 	}
 	return nil
 }
@@ -244,7 +264,7 @@ func (f *TarGzUpgradeFile) Do() error {
 func CheckForUpdates() {
 	defer func() {
 		if r := recover(); r != nil {
-			util.PrintlnErrorf("Check for updates error: %s", r)
+			util.PrintlnErrorf("Check for updates eror: %s", r)
 		}
 	}()
 
@@ -253,27 +273,17 @@ func CheckForUpdates() {
 	if err != nil {
 		panic(err)
 	}
-	oldVersion, err := version.NewVersion(Version)
+	err = release.Compare()
 	if err != nil {
 		panic(err)
 	}
-	newVersion, err := version.NewVersion(release.Version())
-	if err != nil {
-		panic(err)
-	}
-	util.PrintlnInfof("Current version: %s", oldVersion)
-	util.PrintlnInfof("Latest version: %s", newVersion)
-	if oldVersion.LessThan(newVersion) {
-		util.PrintlnInfo("please use dtail upgrade to ask for upgrade")
-	} else {
-		util.PrintlnInfo("the version is already up to date and no update is required")
-	}
+
 }
 
 func AskUpgrade(direct bool) {
 	defer func() {
 		if r := recover(); r != nil {
-			util.PrintlnErrorf("An exception occurred during the update process: %s", r)
+			util.PrintlnErrorf("Check for updates eror: %s", r)
 		}
 	}()
 

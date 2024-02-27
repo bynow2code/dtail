@@ -22,6 +22,7 @@ THE SOFTWARE.
 package cmd
 
 import (
+	"fmt"
 	"github.com/bynow2code/dtail/internal"
 
 	"github.com/spf13/cobra"
@@ -31,6 +32,10 @@ import (
 var upgradeCmd = &cobra.Command{
 	Use:   "upgrade",
 	Short: "Run check for new version and upgrade",
+	PersistentPreRun: func(cmd *cobra.Command, args []string) {
+		fmt.Println(2222)
+		//internal.CheckForUpdates()
+	},
 	Run: func(cmd *cobra.Command, args []string) {
 		internal.AskUpgrade(false)
 	},
