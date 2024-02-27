@@ -241,10 +241,10 @@ func (f *TarGzUpgradeFile) Do() error {
 	return err
 }
 
-func CheckUpgrade() {
+func CheckForUpdates() {
 	defer func() {
 		if r := recover(); r != nil {
-			util.PrintlnInfof("An exception occurred during the update process: %s", r)
+			util.PrintlnErrorf("Check for updates error: %s", r)
 		}
 	}()
 
@@ -261,7 +261,8 @@ func CheckUpgrade() {
 	if err != nil {
 		panic(err)
 	}
-	util.PrintlnInfof("current version: %s, new version: %s", oldVersion, newVersion)
+	util.PrintlnInfof("Current version: %s", oldVersion)
+	util.PrintlnInfof("Latest version: %s", newVersion)
 	if oldVersion.LessThan(newVersion) {
 		util.PrintlnInfo("please use dtail upgrade to ask for upgrade")
 	} else {

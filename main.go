@@ -27,6 +27,6 @@ import (
 )
 
 func main() {
-	internal.CheckUpgrade()
+	internal.CheckForUpdates()
 	cmd.Execute()
 }
