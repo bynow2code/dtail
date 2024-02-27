@@ -293,9 +293,9 @@ func AskUpgrade(direct bool) {
 		panic(err)
 	}
 	if oldVersion.LessThan(newVersion) {
-		util.PrintlnInfo("is the current version outdated and should it be upgraded? (y)")
+		util.PrintlnInfo("Upgrade now? (y/n)")
 	} else {
-		util.PrintlnInfo("the version is already up to date and no update is required")
+		util.PrintlnInfo("You are already using the latest version.")
 		return
 	}
 
