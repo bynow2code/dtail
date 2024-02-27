@@ -244,7 +244,7 @@ func (f *TarGzUpgradeFile) Do() error {
 func CheckUpgrade() {
 	defer func() {
 		if r := recover(); r != nil {
-			util.PrintInfo("An exception occurred during the update process", r)
+			util.PrintlnInfof("An exception occurred during the update process: %s", r)
 		}
 	}()
 
@@ -261,18 +261,18 @@ func CheckUpgrade() {
 	if err != nil {
 		panic(err)
 	}
-	util.PrintInfo(fmt.Sprintf("current version: %s, new version: %s", oldVersion, newVersion))
+	util.PrintlnInfof("current version: %s, new version: %s", oldVersion, newVersion)
 	if oldVersion.LessThan(newVersion) {
-		util.PrintInfo("please use dtail upgrade to ask for upgrade")
+		util.PrintlnInfo("please use dtail upgrade to ask for upgrade")
 	} else {
-		util.PrintInfo("the version is already up to date and no update is required")
+		util.PrintlnInfo("the version is already up to date and no update is required")
 	}
 }
 
 func AskUpgrade(direct bool) {
 	defer func() {
 		if r := recover(); r != nil {
-			util.PrintInfo("An exception occurred during the update process", r)
+			util.PrintlnErrorf("An exception occurred during the update process: %s", r)
 		}
 	}()
 
@@ -282,8 +282,8 @@ func AskUpgrade(direct bool) {
 		panic(err)
 	}
 
-	util.PrintInfo("version", Version)
-	util.PrintInfo("new version", release.Version())
+	util.PrintlnInfof("version: %s", Version)
+	util.PrintlnInfof("new version: %s", release.Version())
 	oldVersion, err := version.NewVersion(Version)
 	if err != nil {
 		panic(err)
@@ -293,9 +293,9 @@ func AskUpgrade(direct bool) {
 		panic(err)
 	}
 	if oldVersion.LessThan(newVersion) {
-		util.PrintInfo("is the current version outdated and should it be upgraded? (y)")
+		util.PrintlnInfo("is the current version outdated and should it be upgraded? (y)")
 	} else {
-		util.PrintInfo("the version is already up to date and no update is required")
+		util.PrintlnInfo("the version is already up to date and no update is required")
 		return
 	}
 
@@ -308,14 +308,14 @@ func AskUpgrade(direct bool) {
 	input = strings.TrimSpace(input)
 
 	if direct || input == "y" {
-		util.PrintInfo("upgrading in progress")
+		util.PrintlnInfo("upgrading in progress")
 
 		err = release.Upgrade()
 		if err != nil {
 			panic(err)
 		}
 
-		util.PrintInfo("upgrade completed")
+		util.PrintlnInfo("upgrade completed")
 		os.Exit(0)
 	}
 }

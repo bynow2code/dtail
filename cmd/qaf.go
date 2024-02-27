@@ -22,7 +22,6 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"github.com/bynow2code/dtail/util"
 	"github.com/jedib0t/go-pretty/v6/table"
@@ -58,7 +57,7 @@ var addCmd = &cobra.Command{
 		if !appCfg.force {
 			_, ok := appCfg.Qaf[shortcut]
 			if ok {
-				util.PrintFatal(errors.New("duplicate shortcut, use -f to overwrite"))
+				util.PrintlnFatal("duplicate shortcut, use -f to overwrite")
 			}
 		}
 
@@ -68,7 +67,7 @@ var addCmd = &cobra.Command{
 		err := viper.WriteConfig()
 		cobra.CheckErr(err)
 
-		util.PrintInfo("configuration file has been written.")
+		util.PrintlnInfo("configuration file has been written")
 	},
 }
 
@@ -80,7 +79,7 @@ var removeCmd = &cobra.Command{
 		if len(args) == 1 {
 			_, ok := appCfg.Qaf[args[0]]
 			if !ok {
-				util.PrintFatal(errors.New("shortcut does not exist"))
+				util.PrintlnFatal("shortcut does not exist")
 			}
 		}
 
@@ -93,7 +92,7 @@ var removeCmd = &cobra.Command{
 		err := viper.WriteConfig()
 		cobra.CheckErr(err)
 
-		util.PrintInfo("configuration file has been written.")
+		util.PrintlnInfo("configuration file has been written.")
 	},
 }
 

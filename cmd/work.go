@@ -22,7 +22,6 @@ THE SOFTWARE.
 package cmd
 
 import (
-	"errors"
 	"github.com/bynow2code/dtail/internal"
 	"github.com/bynow2code/dtail/util"
 	"github.com/spf13/cobra"
@@ -36,7 +35,7 @@ var workCmd = &cobra.Command{
 		shortcut := args[0]
 		shortcutEntry, ok := appCfg.Qaf[shortcut]
 		if !ok {
-			util.PrintFatal(errors.New("shortcut does not exist"))
+			util.PrintlnFatal("shortcut does not exist")
 		}
 
 		internal.NewTailDir(shortcutEntry.FolderPath)
